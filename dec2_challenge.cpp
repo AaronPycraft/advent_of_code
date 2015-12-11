@@ -44,4 +44,40 @@ void initFile(fstream &fileIn) {
     cerr << "Unable to open file." << endl;
     exit(20); 
   }//end if
+  string inputLine;
+  vector<int> lwh; //length, width, height
+  string l, w, h;
+
+  //--split line into separate units of lenght, width, height
+  for(int i = 0; i < inputLine.length(); i++) {
+    int delimIndx;
+    if (inputLine[i] == 'x') {
+      //--
+      delimIndx = i;
+    }//end if
+    
+    //--get string from beginning to the delimiter
+    for
+
+
+  }//end loop
+  
+
+  /*
+  std::ifstream infile("thefile.txt");
+  std::string line;//input line
+
+  while (std::getline(infile, line))
+  {
+    std::istringstream iss(line);
+    int n;
+    std::vector<int> v;
+
+    while (iss >> n) {
+      v.push_back(n);
+    }
+
+    // do something useful with v
+  }
+ */
 }//end function
