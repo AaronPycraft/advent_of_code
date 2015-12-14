@@ -21,16 +21,20 @@ using std::string;
 //--Global variables
 string FILENAME = "dec2_challenge_input.txt";
 long int totalSA;	//total surface area
+int totalRibbonLength;
 
 //--Function prototypes
 void process_input();
 void addPresentSurfaceArea(present p);
 void split(string numStr, int (&nums)[3]);
+void addRibbonLength(present p);
 
 int main() {
   process_input();
   std::cout << "The total surface area needed is: " << std::fixed 
 	  << std::setprecision(2) << totalSA << " ft^3.\n";
+  std::cout << "The total ribbon length needed is: " <<  totalRibbonLength 
+	  << " ft. " << "\n";
 
   return 0;
 }//end main
@@ -72,6 +76,7 @@ void process_input() {
     
     //--Add this present's SA to the total
     addPresentSurfaceArea(p);
+    addRibbonLength(p);
 
   }//end while
   
@@ -81,8 +86,6 @@ void process_input() {
 
 //--adds a present's surface area to the running total
 void addPresentSurfaceArea(present p) {
-  std::cout << "\n\tAdding SA of " << p.getSurfaceArea() 
-	  << "\n\t and smallArea of: " << p.getAreaSmallestSide() << "\n";
   totalSA += p.getSurfaceArea() + p.getAreaSmallestSide();
 }
 
@@ -94,5 +97,11 @@ void split(string numStr, int (&nums)[3]) {
   nums[0] = atoi(numStr.substr(0     , d1   		).c_str());
   nums[1] = atoi(numStr.substr(d1 + 1, d2 - 1		).c_str());
   nums[2] = atoi(numStr.substr(d2 + 1, numStr.length()	).c_str());
-
 }//end funciton
+ 
+//--add the ribbon length for this present
+void addRibbonLength(present p) {
+  std::cout << "\n\tAdding smallest perimeter of: " << p.getSmallestPerimiter() 
+	  << "\n\t and volume: " << p.getVolume() << "\n";
+  totalRibbonLength += p.getSmallestPerimiter() + p.getVolume();
+}//end function

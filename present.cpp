@@ -5,7 +5,6 @@
 //--This class is used to represent the presents given in advent of code challenge 
 //  day 2, december 2nd.  
 
-
 class present {
   private:
     int length;
@@ -30,6 +29,8 @@ class present {
     //--Computations
     int getSurfaceArea();
     double getAreaSmallestSide();
+    int getSmallestPerimiter();
+    int getVolume();
 
 };//end class
 
@@ -83,5 +84,30 @@ double present::getAreaSmallestSide() {
   return double(temp[0] * temp[1] * temp[2])/max;
 }//end function
   
+//--returns the value of the smallest perimiter of the box
+//  the smallest permiter will be 2x the smallest sum of two sides
+//  we can get the smallest permiter by setting the largest side length to 0
+//  and compute 2 x the sum of length of sides
+int present::getSmallestPerimiter() {
+  //--variables
+  int max = -1;
+  int temp[] = {length, width, height};
+  //--determine smallest side
+  for(int i = 0; i < 4; i++) {
+    //--If we're at the last iteration...
+    if( i > 2)  { 
+      //--after the max has been found, set that value to zero
+      temp[max] = 0; break;
+    } 
+    else if (temp[i] > temp[max]) max = i;
+  }//end for
 
+  //--perimiter is the sum of the lengts of sides, with the largest side set
+  //  to zero, we can just sum twice the length of each side
+  return (2*temp[0] + 2*temp[1] + 2*temp[2]);
+}
 
+//--computes and returns cubic volume
+int present::getVolume() {
+  return length*width*height;
+}
