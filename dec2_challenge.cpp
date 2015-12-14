@@ -9,75 +9,90 @@
   http://adventofcode.com/day/2
 */
 
-#include <cstdlib> //for exit()
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <iomanip>
+#include "present.cpp"
 
-using namespace std;
+using std::string;
+
+//--Global variables
+string FILENAME = "dec2_challenge_input.txt";
+long int totalSA;	//total surface area
 
 //--Function prototypes
-void initFile(fstream &file);
+void process_input();
+void addPresentSurfaceArea(present p);
+void split(string numStr, int (&nums)[3]);
 
 int main() {
-  //--Variables
-  fstream fileIn; //--files used to obtain input from file
+  process_input();
+  std::cout << "The total surface area needed is: " << std::fixed 
+	  << std::setprecision(2) << totalSA << " ft^3.\n";
 
-  initFile(fileIn);
-
-  string input;
-  while(!fileIn.eof()) {
-    getline(fileIn,input);
-    std::cout << input << endl;
-    break;
-  }//end while
- 
   return 0;
 }//end main
 
-
-//--Initilze file object, and do error checking
-void initFile(fstream &fileIn) {
-  fileIn.open("dec2_challenge_input.txt");
-  //--If the file could not be opened, display an error
-  if(! fileIn.is_open()) {
-    cout << "ERROR" << endl;
-    cerr << "Unable to open file." << endl;
-    exit(20); 
-  }//end if
-  string inputLine;
-  vector<int> lwh; //length, width, height
-  string l, w, h;
-
-  //--split line into separate units of lenght, width, height
-  for(int i = 0; i < inputLine.length(); i++) {
-    int delimIndx;
-    if (inputLine[i] == 'x') {
-      //--
-      delimIndx = i;
-    }//end if
-    
-    //--get string from beginning to the delimiter
-    for
-
-
-  }//end loop
+//--Reads in the data file into a vector, holding the dimensions of each present
+void process_input() {
+  //--Variables
+  totalSA = 0; //--total surface area of all presents
+  std::ifstream fin;
+  string numStr; //--to hold the file's line
+  char delimiter = 'x';
   
+  //--setup file reader
+  if(FILENAME.length() < 1 ) {
+    std::cerr << "Error, no filename exists in file_reader object.\n";
+    std::exit(20);
+  }//end if
+  //--open the file
+  fin.open(FILENAME.c_str(), std::ios::in);
+  if(!fin.is_open())   {
+    std::cerr << "Error, file could not be opened!.\n";
+    std::exit(20);
+  }//end if
 
-  /*
-  std::ifstream infile("thefile.txt");
-  std::string line;//input line
+  //--Begin reading file
+  while(fin.good()) {
+    present p; 
+    //--read length
+    std::getline(fin, numStr);
+    if(numStr.empty()) break;
 
-  while (std::getline(infile, line))
-  {
-    std::istringstream iss(line);
-    int n;
-    std::vector<int> v;
+    int nums[3];
+    split(numStr, nums);
 
-    while (iss >> n) {
-      v.push_back(n);
-    }
+    //--set the dimensions of the present
+    p.setLength(nums[0]);
+    p.setWidth( nums[1]);
+    p.setHeight(nums[2]);
+    
+    //--Add this present's SA to the total
+    addPresentSurfaceArea(p);
 
-    // do something useful with v
-  }
- */
+  }//end while
+  
+  //--close the file
+  fin.close();
 }//end function
+
+//--adds a present's surface area to the running total
+void addPresentSurfaceArea(present p) {
+  std::cout << "\n\tAdding SA of " << p.getSurfaceArea() 
+	  << "\n\t and smallArea of: " << p.getAreaSmallestSide() << "\n";
+  totalSA += p.getSurfaceArea() + p.getAreaSmallestSide();
+}
+
+void split(string numStr, int (&nums)[3]) {
+  //--locate the delimiters
+  int d1 = numStr.find('x', 0); 
+  int d2 = numStr.find('x', d1 + 1); 
+  //--convert to ints, and add to number array 
+  nums[0] = atoi(numStr.substr(0     , d1   		).c_str());
+  nums[1] = atoi(numStr.substr(d1 + 1, d2 - 1		).c_str());
+  nums[2] = atoi(numStr.substr(d2 + 1, numStr.length()	).c_str());
+
+}//end funciton
